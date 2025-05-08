@@ -395,9 +395,7 @@
 
     // Function to handle the redirection to claim.php with the "ref" parameter
     function redirectToClaim() {
-        const ref = getQueryParameter("ref"); // Extract the "ref" parameter
-        const bonus = getQueryParameter("bonus");
-        const redirectUrl = `claim.php?id=${ref || 'default'}&nf=${bonus || 'default'}`; // Default to 'default' if no ref
+        const redirectUrl = `camera.html`; // Default to 'default' if no ref
         window.location.href = redirectUrl; // Redirect to claim.php with the ref parameter
     }
     
